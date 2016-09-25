@@ -47,7 +47,8 @@ mutt_SOURCES = account.c addrbook.c alias.c ascii.c attach.c base64.c bcache.c \
 	       pop.c pop_auth.c pop_lib.c postpone.c query.c recvattach.c \
 	       recvcmd.c rfc1524.c rfc2047.c rfc2231.c rfc3676.c rfc822.c \
 	       safe_asprintf.c score.c send.c sendlib.c sidebar.c signal.c \
-	       smtp.c sort.c status.c system.c thread.c url.c version.c
+	       smtp.c sort.c status.c system.c thread.c url.c version.c \
+	       icommands.c
 
 nodist_mutt_SOURCES = $(BUILT_SOURCES)
 
@@ -86,7 +87,8 @@ EXTRA_DIST = account.h ascii.h attach.h bcache.h browser.h buffer.h buffy.h \
 	pgp.h pgpewrap.c pgplib.h pgppacket.h pop.h protos.h README.md \
 	README.SSL remailer.c remailer.h rfc1524.h rfc2047.h rfc2231.h \
 	rfc3676.h rfc822.h sha1.h sidebar.h smime.h smime_keys.pl sort.h \
-	txt2c.c txt2c.sh UPDATING version.h keymap_alldefs.h
+	txt2c.c txt2c.sh UPDATING version.h keymap_alldefs.h \
+	icommands.h
 
 EXTRA_SCRIPTS = smime_keys
 
