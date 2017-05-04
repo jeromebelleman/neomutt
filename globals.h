@@ -26,10 +26,6 @@ WHERE CONTEXT *Context;
 WHERE char Errorbuf[STRING];
 WHERE char AttachmentMarker[STRING];
 
-#ifdef USE_DOTLOCK
-WHERE char *MuttDotlock;
-#endif
-
 WHERE ADDRESS *EnvFrom;
 WHERE ADDRESS *From;
 

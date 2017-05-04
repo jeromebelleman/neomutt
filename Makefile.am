@@ -3,7 +3,7 @@
 include $(top_srcdir)/flymake.am
 
 AUTOMAKE_OPTIONS = 1.6 foreign
-EXTRA_PROGRAMS = mutt_dotlock pgpring pgpewrap mutt_md5
+EXTRA_PROGRAMS = pgpring pgpewrap mutt_md5
 
 # Test the .tar file by building everything
 AM_DISTCHECK_CONFIGURE_FLAGS = --enable-debug --enable-gpgme --enable-notmuch \
@@ -26,14 +26,11 @@ endif
 
 bin_SCRIPTS = $(SMIMEAUX_TARGET)
 
-DOTLOCK_GROUP='mail'
-DOTLOCK_PERMISSION='2755'
-
 distdir = neo$(PACKAGE)-$(VERSION)
 
 BUILT_SOURCES = keymap_defs.h keymap_alldefs.h git_ver.h conststrings.c
 
-bin_PROGRAMS = mutt $(DOTLOCK_TARGET) $(PGPAUX_TARGET)
+bin_PROGRAMS = mutt $(PGPAUX_TARGET)
 
 mutt_SOURCES = account.c addrbook.c alias.c ascii.c attach.c base64.c bcache.c \
 	       browser.c buffer.c buffy.c charset.c color.c commands.c \
@@ -67,7 +64,7 @@ AM_CPPFLAGS=-I. -I$(top_srcdir) $(GPGME_CFLAGS)
 
 EXTRA_mutt_SOURCES = browser.h crypt_gpgme.c crypt_mod_pgp_classic.c \
 	crypt_mod_pgp_gpgme.c crypt_mod_smime_classic.c \
-	crypt_mod_smime_gpgme.c dotlock.c gnupgparse.c mbyte.h mutt_idna.c \
+	crypt_mod_smime_gpgme.c gnupgparse.c mbyte.h mutt_idna.c \
 	mutt_idna.h mutt_lua.c mutt_sasl.c mutt_notmuch.c mutt_ssl.c \
 	mutt_ssl_gnutls.c pgp.c pgpinvoke.c pgpkey.c pgplib.c pgpmicalg.c \
 	pgppacket.c remailer.c remailer.h resize.c sha1.c smime.c url.h utf8.c \
@@ -76,7 +73,7 @@ EXTRA_mutt_SOURCES = browser.h crypt_gpgme.c crypt_mod_pgp_classic.c \
 EXTRA_DIST = account.h ascii.h attach.h bcache.h browser.h buffer.h buffy.h \
 	ChangeLog ChangeLog.neomutt ChangeLog.nntp charset.h compress.h \
 	config.rpath copy.h COPYRIGHT crypt_gpgme.h crypthash.h depcomp \
-	dotlock.h extlib.c filter.h functions.h gen_defs globals.h group.h \
+	extlib.c filter.h functions.h gen_defs globals.h group.h \
 	hash.h history.h init.h keymap.h lib.h LICENSE.md mailbox.h mapping.h \
 	mbyte.h md5.h mime.h mime.types mutt.h mutt_commands.h mutt_crypt.h \
 	mutt_curses.h mutt_idna.h mutt_lua.h mutt_menu.h mutt_notmuch.h \
@@ -89,10 +86,6 @@ EXTRA_DIST = account.h ascii.h attach.h bcache.h browser.h buffer.h buffy.h \
 	txt2c.c txt2c.sh UPDATING version.h keymap_alldefs.h
 
 EXTRA_SCRIPTS = smime_keys
-
-mutt_dotlock_SOURCES = mutt_dotlock.c
-mutt_dotlock_LDADD = $(LIBOBJS)
-mutt_dotlock_DEPENDENCIES = $(LIBOBJS)
 
 pgpring_SOURCES = ascii.c extlib.c lib.c md5.c pgplib.c pgppacket.c \
 	pgppubring.c sha1.c
@@ -108,9 +101,6 @@ txt2c_LDADD =
 
 noinst_PROGRAMS = $(MUTT_MD5) txt2c
 
-mutt_dotlock.c: dotlock.c
-	cp $(srcdir)/dotlock.c mutt_dotlock.c
-
 conststrings.c: txt2c config.status
 	( \
 		($(CC) -v >/dev/null 2>&1 && $(CC) -v) || \
@@ -124,7 +114,7 @@ conststrings.c: txt2c config.status
 	sed -e 's/^"//' -e 's/"$$//' | ${srcdir}/txt2c.sh configure_options >>conststrings_c
 	mv -f conststrings_c conststrings.c
 
-CLEANFILES = mutt_dotlock.c keymap_alldefs.h $(BUILT_SOURCES)
+CLEANFILES = keymap_alldefs.h $(BUILT_SOURCES)
 
 DISTCLEANFILES= smime_keys txt2c
 
@@ -155,15 +145,6 @@ git_ver.h: $(mutt_SOURCES) $(SUBDIRS)
 	rm -f git_ver.h.tmp
 
 install-exec-hook:
-	if test -f $(DESTDIR)$(bindir)/mutt.dotlock && test -f $(DESTDIR)$(bindir)/mutt_dotlock ; then	\
-		rm -f $(DESTDIR)$(bindir)/mutt.dotlock ;		\
-		ln -sf $(DESTDIR)$(bindir)/mutt_dotlock $(DESTDIR)$(bindir)/mutt.dotlock ; \
-	fi
-	if test -f $(DESTDIR)$(bindir)/mutt_dotlock && test x$(DOTLOCK_GROUP) != x ; then \
-		chgrp $(DOTLOCK_GROUP) $(DESTDIR)$(bindir)/mutt_dotlock && \
-		chmod $(DOTLOCK_PERMISSION) $(DESTDIR)$(bindir)/mutt_dotlock || \
-		{ echo "Can't fix mutt_dotlock's permissions!  This is required to lock mailboxes in the mail spool directory." >&2 ; exit 1 ; } \
-	fi
 
 install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(sysconfdir)

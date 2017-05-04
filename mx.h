@@ -79,7 +79,7 @@ void mx_update_context(CONTEXT *ctx, int new_messages);
 void mx_update_tables(CONTEXT *ctx, int committing);
 
 
-int mx_lock_file(const char *path, int fd, int excl, int dot, int timeout);
+int mx_lock_file(const char *path, int fd, int excl, int timeout);
 int mx_unlock_file(const char *path, int fd, int dot);
 
 struct mx_ops *mx_get_ops(int magic);
